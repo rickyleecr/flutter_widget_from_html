@@ -198,11 +198,22 @@ class WebViewState extends State<WebView> {
     );
   }
 
-  void _onPageFinished(String url) {
+  Future<void> _onPageFinished(String url) async {
     _firstFinishedUrl ??= url;
     unawaited(_ignoreError(_resizeObserver?.observe('document.body')));
     hasPageFinishedLoading = true;
     reloadIframeInteractivity();
+
+    // Hide `Youtube` button to prevent users from clicking it that causes the
+    // player to play non-embeded video using normal webview.
+    _controller.runJavaScript(
+      '''
+      const youtubeButton = document.querySelector("a.ytp-youtube-button");
+      if (youtubeButton) {
+        youtubeButton.style.display = 'none';
+      }
+      ''',
+    );
   }
 }
 
