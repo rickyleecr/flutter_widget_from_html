@@ -27,6 +27,18 @@ class WebViewState extends State<WebView> {
   _Issue37? _issue37;
   _ResizeObserver? _resizeObserver;
 
+  bool isIframeInteractive = true;
+  bool hasPageFinishedLoading = false;
+
+  Future<void> reloadIframeInteractivity() async {
+    if (isIframeInteractive != widget.isIframeInteractive) {
+      isIframeInteractive = widget.isIframeInteractive;
+      await _controller.runJavaScript(
+        'document.body.style.pointerEvents = "${isIframeInteractive ? "auto" : "none"}"',
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -104,6 +116,10 @@ class WebViewState extends State<WebView> {
 
   @override
   Widget build(BuildContext context) {
+    if (hasPageFinishedLoading) {
+      reloadIframeInteractivity();
+    }
+
     return AspectRatio(
       aspectRatio: _aspectRatio,
       child: _buildWebView(),
@@ -185,6 +201,8 @@ class WebViewState extends State<WebView> {
   void _onPageFinished(String url) {
     _firstFinishedUrl ??= url;
     unawaited(_ignoreError(_resizeObserver?.observe('document.body')));
+    hasPageFinishedLoading = true;
+    reloadIframeInteractivity();
   }
 }
 

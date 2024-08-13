@@ -97,6 +97,12 @@ class WebView extends StatefulWidget {
   /// {@endtemplate}
   final String? userAgent;
 
+  /// {@template web_view.isIframeInteractive}
+  /// The value used to control whether the iframe can pass hit test.
+  ///
+  /// {@endtemplate}
+  final bool isIframeInteractive;
+
   /// Creates a web view.
   const WebView(
     this.url, {
@@ -112,6 +118,7 @@ class WebView extends StatefulWidget {
     this.onAndroidShowCustomWidget,
     this.unsupportedWorkaroundForIssue37 = true,
     this.userAgent,
+    this.isIframeInteractive = true,
     super.key,
   }) :
         // ignore: avoid_bool_literals_in_conditional_expressions
