@@ -10,6 +10,7 @@ import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart'
     as lib;
 
 import 'web_view.dart';
+import 'web_view_source.dart';
 
 final _logger = Logger('fwfh_webview');
 
@@ -108,9 +109,8 @@ class WebViewState extends State<WebView> {
       );
     }
 
-    final uri = Uri.tryParse(widget.url);
-    if (mounted && uri != null) {
-      await _controller.loadRequest(uri);
+    if (mounted) {
+      widget.source.loadWith(_controller);
     }
   }
 
@@ -164,7 +164,7 @@ class WebViewState extends State<WebView> {
   Widget _buildWebView() => lib.WebViewWidget(
         controller: _controller,
         gestureRecognizers: widget.gestureRecognizers,
-        key: Key(widget.url),
+        key: Key(widget.source.data),
       );
 
   lib.NavigationDecision _interceptNavigationRequest(
@@ -175,7 +175,7 @@ class WebViewState extends State<WebView> {
     if (callback != null &&
         _firstFinishedUrl != null &&
         req.isMainFrame &&
-        req.url != widget.url &&
+        (widget.source is URLWebViewSource && req.url != widget.source.data) &&
         req.url != _firstFinishedUrl) {
       intercepted = callback(req.url);
     }

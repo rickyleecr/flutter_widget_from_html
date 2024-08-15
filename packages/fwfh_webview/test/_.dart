@@ -25,7 +25,8 @@ String? webViewExplainer(helper.Explainer parent, Widget widget) {
         ? ',userAgent=${widget.userAgent}'
         : '';
 
-    return '[WebView:url=${widget.url}'
+    assert(widget.source is URLWebViewSource);
+    return '[WebView:url=${widget.source.data}'
         ',aspectRatio=${widget.aspectRatio.toStringAsFixed(2)}'
         "${widget.autoResize ? ',autoResize=${widget.autoResize}' : ''}"
         '$debuggingEnabled'

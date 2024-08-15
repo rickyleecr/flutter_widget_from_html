@@ -5,11 +5,12 @@ import 'package:flutter/widgets.dart';
 import 'fallback.dart'
     if (dart.library.io) 'io.dart'
     if (dart.library.js_interop) 'js_interop.dart';
+import 'web_view_source.dart';
 
 /// An embedded web view.
 class WebView extends StatefulWidget {
-  /// The website URL.
-  final String url;
+  /// The data source to load web view.
+  final WebViewSource source;
 
   /// The initial aspect ratio.
   final double aspectRatio;
@@ -105,7 +106,7 @@ class WebView extends StatefulWidget {
 
   /// Creates a web view.
   const WebView(
-    this.url, {
+    this.source, {
     required this.aspectRatio,
     @Deprecated('No longer used.') this.autoResizeIntervals = const [],
     bool? autoResize,

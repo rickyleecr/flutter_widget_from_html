@@ -8,6 +8,7 @@ import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart
 
 import 'internal.dart';
 import 'web_view/web_view.dart';
+import 'web_view/web_view_source.dart';
 
 /// A mixin that can build [WebView] for IFRAME.
 mixin WebViewFactory on WidgetFactory {
@@ -64,7 +65,7 @@ mixin WebViewFactory on WidgetFactory {
         (sandbox == null ||
             sandbox.contains(kAttributeIframeSandboxAllowScripts));
     return WebView(
-      url,
+      URLWebViewSource(url),
       aspectRatio: dimensOk ? width / height : 16 / 9,
       autoResize: !dimensOk && js,
       debuggingEnabled: webViewDebuggingEnabled,

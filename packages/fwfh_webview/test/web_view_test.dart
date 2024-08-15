@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fwfh_webview/src/web_view/web_view.dart';
+import 'package:fwfh_webview/src/web_view/web_view_source.dart';
 import 'package:measurer/measurer.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
@@ -19,7 +20,7 @@ void main() {
     Future<void> runAutoResizeApp(WidgetTester tester, String url) async {
       final child = Measurer(
         onMeasure: (v, _) => aspectRatio = v.width / v.height,
-        child: WebView(url, aspectRatio: defaultAspectRatio),
+        child: WebView(URLWebViewSource(url), aspectRatio: defaultAspectRatio),
       );
 
       aspectRatio = double.nan;
@@ -77,14 +78,15 @@ void main() {
     group('android', () {
       testWidgets('renders without value', (WidgetTester tester) async {
         debugDefaultTargetPlatformOverride = TargetPlatform.android;
-        runApp(WebView(url, aspectRatio: aspectRatio));
+        runApp(WebView(URLWebViewSource(url), aspectRatio: aspectRatio));
         expect(FakeWebViewController.instance?.debuggingEnabled, isFalse);
         debugDefaultTargetPlatformOverride = null;
       });
 
       testWidgets('renders true', (WidgetTester tester) async {
         debugDefaultTargetPlatformOverride = TargetPlatform.android;
-        runApp(WebView(url, aspectRatio: aspectRatio, debuggingEnabled: true));
+        runApp(WebView(URLWebViewSource(url),
+            aspectRatio: aspectRatio, debuggingEnabled: true));
         expect(FakeWebViewController.instance?.debuggingEnabled, isTrue);
         debugDefaultTargetPlatformOverride = null;
       });
@@ -92,7 +94,8 @@ void main() {
       testWidgets('renders false', (WidgetTester tester) async {
         debugDefaultTargetPlatformOverride = TargetPlatform.android;
         // ignore: avoid_redundant_argument_values
-        runApp(WebView(url, aspectRatio: aspectRatio, debuggingEnabled: false));
+        runApp(WebView(URLWebViewSource(url),
+            aspectRatio: aspectRatio, debuggingEnabled: false));
         expect(FakeWebViewController.instance?.debuggingEnabled, isFalse);
         debugDefaultTargetPlatformOverride = null;
       });
@@ -101,14 +104,15 @@ void main() {
     group('ios', () {
       testWidgets('renders without value', (WidgetTester tester) async {
         debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
-        runApp(WebView(url, aspectRatio: aspectRatio));
+        runApp(WebView(URLWebViewSource(url), aspectRatio: aspectRatio));
         expect(FakeWebViewController.instance?.debuggingEnabled, isFalse);
         debugDefaultTargetPlatformOverride = null;
       });
 
       testWidgets('renders true', (WidgetTester tester) async {
         debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
-        runApp(WebView(url, aspectRatio: aspectRatio, debuggingEnabled: true));
+        runApp(WebView(URLWebViewSource(url),
+            aspectRatio: aspectRatio, debuggingEnabled: true));
         expect(FakeWebViewController.instance?.debuggingEnabled, isTrue);
         debugDefaultTargetPlatformOverride = null;
       });
@@ -116,7 +120,8 @@ void main() {
       testWidgets('renders false', (WidgetTester tester) async {
         debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
         // ignore: avoid_redundant_argument_values
-        runApp(WebView(url, aspectRatio: aspectRatio, debuggingEnabled: false));
+        runApp(WebView(URLWebViewSource(url),
+            aspectRatio: aspectRatio, debuggingEnabled: false));
         expect(FakeWebViewController.instance?.debuggingEnabled, isFalse);
         debugDefaultTargetPlatformOverride = null;
       });
@@ -130,7 +135,7 @@ void main() {
 
       runApp(
         WebView(
-          url,
+          URLWebViewSource(url),
           aspectRatio: 16 / 9,
           interceptNavigationRequest: (url) {
             navigationRequestUrls.add(url);
@@ -159,7 +164,7 @@ void main() {
 
       runApp(
         WebView(
-          url,
+          URLWebViewSource(url),
           aspectRatio: 16 / 9,
           interceptNavigationRequest: (url) {
             navigationRequestUrls.add(url);
@@ -188,7 +193,7 @@ void main() {
 
       runApp(
         WebView(
-          url,
+          URLWebViewSource(url),
           aspectRatio: 16 / 9,
           interceptNavigationRequest: (url) {
             navigationRequestUrls.add(url);
@@ -216,7 +221,7 @@ void main() {
 
       runApp(
         WebView(
-          url,
+          URLWebViewSource(url),
           aspectRatio: 16 / 9,
           interceptNavigationRequest: (url) {
             navigationRequestUrls.add(url);
@@ -246,7 +251,7 @@ void main() {
     const aspectRatio = 16 / 9;
 
     testWidgets('renders without value', (WidgetTester tester) async {
-      runApp(WebView(url, aspectRatio: aspectRatio));
+      runApp(WebView(URLWebViewSource(url), aspectRatio: aspectRatio));
       expect(
         FakeWebViewController.instance?.javaScriptMode,
         JavaScriptMode.unrestricted,
@@ -256,7 +261,7 @@ void main() {
     testWidgets('renders true', (WidgetTester tester) async {
       runApp(
         WebView(
-          url,
+          URLWebViewSource(url),
           aspectRatio: aspectRatio,
           // ignore: avoid_redundant_argument_values
           js: true,
@@ -269,7 +274,8 @@ void main() {
     });
 
     testWidgets('renders false', (WidgetTester tester) async {
-      runApp(WebView(url, aspectRatio: aspectRatio, js: false));
+      runApp(
+          WebView(URLWebViewSource(url), aspectRatio: aspectRatio, js: false));
       expect(
         FakeWebViewController.instance?.javaScriptMode,
         JavaScriptMode.disabled,
@@ -285,7 +291,7 @@ void main() {
     group('android', () {
       testWidgets('renders without value', (WidgetTester tester) async {
         debugDefaultTargetPlatformOverride = TargetPlatform.android;
-        runApp(WebView(url, aspectRatio: aspectRatio));
+        runApp(WebView(URLWebViewSource(url), aspectRatio: aspectRatio));
         expect(
           FakeWebViewController
               .instance?.androidMediaPlaybackRequiresUserGesture,
@@ -298,7 +304,7 @@ void main() {
         debugDefaultTargetPlatformOverride = TargetPlatform.android;
         runApp(
           WebView(
-            url,
+            URLWebViewSource(url),
             aspectRatio: aspectRatio,
             mediaPlaybackAlwaysAllow: true,
           ),
@@ -315,7 +321,7 @@ void main() {
         debugDefaultTargetPlatformOverride = TargetPlatform.android;
         runApp(
           WebView(
-            url,
+            URLWebViewSource(url),
             aspectRatio: aspectRatio,
             // ignore: avoid_redundant_argument_values
             mediaPlaybackAlwaysAllow: false,
@@ -347,7 +353,7 @@ void main() {
 
       testWidgets('renders without value', (WidgetTester tester) async {
         debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
-        runApp(WebView(url, aspectRatio: aspectRatio));
+        runApp(WebView(URLWebViewSource(url), aspectRatio: aspectRatio));
         expectMediaTypesRequiringUserAction(true);
         debugDefaultTargetPlatformOverride = null;
       });
@@ -356,7 +362,7 @@ void main() {
         debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
         runApp(
           WebView(
-            url,
+            URLWebViewSource(url),
             aspectRatio: aspectRatio,
             mediaPlaybackAlwaysAllow: true,
           ),
@@ -369,7 +375,7 @@ void main() {
         debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
         runApp(
           WebView(
-            url,
+            URLWebViewSource(url),
             aspectRatio: aspectRatio,
             // ignore: avoid_redundant_argument_values
             mediaPlaybackAlwaysAllow: false,
@@ -390,7 +396,7 @@ void main() {
       MaterialApp(
         home: Scaffold(
           body: WebView(
-            url,
+            URLWebViewSource(url),
             aspectRatio: aspectRatio,
           ),
         ),
@@ -428,7 +434,7 @@ void main() {
       const html = 'reloads on pause';
       final url = Uri.dataFromString(html, mimeType: 'text/html').toString();
 
-      runApp(WebView(url, aspectRatio: 16 / 9));
+      runApp(WebView(URLWebViewSource(url), aspectRatio: 16 / 9));
       expect(FakeWebViewController.instance?.urls, equals([url]));
 
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
@@ -439,7 +445,7 @@ void main() {
       const html = 'reloads on dispose';
       final url = Uri.dataFromString(html, mimeType: 'text/html').toString();
 
-      runApp(WebView(url, aspectRatio: 16 / 9));
+      runApp(WebView(URLWebViewSource(url), aspectRatio: 16 / 9));
       expect(FakeWebViewController.instance?.urls, equals([url]));
 
       runApp(const SizedBox.shrink());
@@ -452,7 +458,7 @@ void main() {
     testWidgets('handles load error', (WidgetTester tester) async {
       runApp(
         const WebView(
-          'http://domain.com?loadRequest=error',
+          URLWebViewSource('http://domain.com?loadRequest=error'),
           aspectRatio: 16 / 9,
         ),
       );
@@ -465,12 +471,13 @@ void main() {
     const aspectRatio = 16 / 9;
 
     testWidgets('renders without value', (WidgetTester tester) async {
-      runApp(WebView(url, aspectRatio: aspectRatio));
+      runApp(WebView(URLWebViewSource(url), aspectRatio: aspectRatio));
       expect(FakeWebViewController.instance?.userAgent, isNull);
     });
 
     testWidgets('renders string', (WidgetTester tester) async {
-      runApp(WebView(url, aspectRatio: aspectRatio, userAgent: 'fwfh'));
+      runApp(WebView(URLWebViewSource(url),
+          aspectRatio: aspectRatio, userAgent: 'fwfh'));
       expect(FakeWebViewController.instance?.userAgent, equals('fwfh'));
     });
   });

@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:web/web.dart';
 
 import 'web_view.dart';
+import 'web_view_source.dart';
 
 class WebViewState extends State<WebView> {
   final _iframeElement = document.createElement('iframe') as HTMLIFrameElement;
@@ -13,7 +14,10 @@ class WebViewState extends State<WebView> {
   void initState() {
     super.initState();
 
-    _iframeElement.src = widget.url;
+    if (widget.source is URLWebViewSource) {
+      _iframeElement.src = widget.source.data;
+    }
+
     _iframeElement.style.border = 'none';
 
     if (widget.mediaPlaybackAlwaysAllow) {
