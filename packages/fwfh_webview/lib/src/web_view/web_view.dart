@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'fallback.dart'
     if (dart.library.io) 'io.dart'
     if (dart.library.js_interop) 'js_interop.dart';
+import 'package:webview_flutter/src/webview_controller.dart';
 
 /// An embedded web view.
 class WebView extends StatefulWidget {
@@ -97,6 +98,31 @@ class WebView extends StatefulWidget {
   /// {@endtemplate}
   final String? userAgent;
 
+  /// {@template web_view.onWebViewControllerReady}
+  /// The callback to manipulate the web view controller when it is ready.
+  ///
+  /// {@endtemplate}
+  final void Function(WebViewController controller)? onWebViewControllerReady;
+
+  /// {@template web_view.beforeWebViewCreated}
+  /// The callback to manipulate the web view controller before the web view is created.
+  ///
+  /// Run javascript code before the web view is created.
+  ///
+  /// {@endtemplate}
+  final void Function(WebViewController controller)? beforeWebViewCreated;
+
+  /// {@template web_view.onCustomizeIframeElement}
+  /// The callback to customize the iframe element.
+  ///
+  /// Since `web` package is only supported on Flutter Web, we can't import
+  /// `HTMLIFrameElement` in this file, otherwise ios & android will throw exception.
+  ///
+  /// Instead, we use `dynamic` to allow customization of the iframe element.
+  ///
+  /// {@endtemplate}
+  final void Function(dynamic element)? onCustomizeIframeElement;
+
   /// Creates a web view.
   const WebView(
     this.url, {
@@ -112,6 +138,9 @@ class WebView extends StatefulWidget {
     this.onAndroidShowCustomWidget,
     this.unsupportedWorkaroundForIssue37 = true,
     this.userAgent,
+    this.onCustomizeIframeElement,
+    this.onWebViewControllerReady,
+    this.beforeWebViewCreated,
     super.key,
   }) : autoResize = js && (autoResize ?? js);
 

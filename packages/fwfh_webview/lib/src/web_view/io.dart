@@ -100,10 +100,13 @@ class WebViewState extends State<WebView> {
     if (mounted && uri != null) {
       await _controller.loadRequest(uri);
     }
+
+    widget.onWebViewControllerReady?.call(_controller);
   }
 
   @override
   Widget build(BuildContext context) {
+    widget.beforeWebViewCreated?.call(_controller);
     return AspectRatio(
       aspectRatio: _aspectRatio,
       child: _buildWebView(),
